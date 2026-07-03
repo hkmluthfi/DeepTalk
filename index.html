@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO -->
+  <title>DeepTalk — Percakapan Bermakna Dimulai dari Satu Pertanyaan</title>
+  <meta name="description" content="DeepTalk membantu kamu memulai percakapan yang lebih bermakna melalui kartu pertanyaan yang mendalam, elegan, dan bermakna." />
+  <meta name="keywords" content="deep talk, percakapan bermakna, kartu pertanyaan, refleksi diri, ice breaker" />
+  <meta name="author" content="DeepTalk" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="DeepTalk — Percakapan Bermakna" />
+  <meta property="og:description" content="Setiap percakapan yang bermakna dimulai dari satu pertanyaan." />
+  <meta property="og:type" content="website" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       LANDING PAGE
+  ══════════════════════════════════════════ -->
+  <section id="landing-page" class="page active" aria-label="Halaman Pembuka">
+    <div class="landing-container">
+
+      <!-- Logo & Branding -->
+      <div class="landing-brand">
+        <div class="brand-icon" aria-hidden="true">
+          <span class="brand-icon-dot"></span>
+          <span class="brand-icon-dot"></span>
+          <span class="brand-icon-dot"></span>
+        </div>
+        <h1 class="landing-title">DeepTalk</h1>
+        <p class="landing-subtitle">
+          Setiap percakapan yang bermakna<br />dimulai dari satu pertanyaan.
+        </p>
+      </div>
+
+      <!-- CTA Button -->
+      <button
+        id="btn-mulai"
+        class="btn btn-primary btn-large"
+        aria-label="Mulai menggunakan DeepTalk"
+      >
+        Mulai
+      </button>
+
+      <!-- Dekoratif kecil -->
+      <p class="landing-hint">220+ pertanyaan &bull; 10 kategori &bull; 4 tingkat kedalaman</p>
+    </div>
+
+    <!-- Dekoratif background -->
+    <div class="landing-bg-decoration" aria-hidden="true">
+      <div class="deco-circle deco-circle--1"></div>
+      <div class="deco-circle deco-circle--2"></div>
+      <div class="deco-circle deco-circle--3"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       MAIN PAGE
+  ══════════════════════════════════════════ -->
+  <section id="main-page" class="page" aria-label="Halaman Utama DeepTalk">
+
+    <!-- Header -->
+    <header class="header" role="banner">
+      <div class="header-inner">
+        <div class="header-logo" role="img" aria-label="DeepTalk Logo">
+          <span class="header-logo-dot" aria-hidden="true"></span>
+          <span class="header-logo-text">DeepTalk</span>
+        </div>
+        <nav class="header-nav" aria-label="Navigasi Utama">
+          <a href="#" class="nav-link" id="nav-tentang">Tentang</a>
+          <a href="#" class="nav-link" id="nav-github">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" role="main">
+
+      <!-- Progress Counter -->
+      <div class="progress-section" aria-live="polite" aria-atomic="true">
+        <p class="progress-text" id="progress-text">Siap membuka kartu pertama</p>
+      </div>
+
+      <!-- Card Area -->
+      <div class="card-wrapper" role="region" aria-label="Kartu Pertanyaan">
+
+        <!-- Flip Card Container -->
+        <div class="card-flip-container" id="card-flip-container">
+          <div class="card-flipper" id="card-flipper" aria-live="polite">
+
+            <!-- Card Front (Tertutup) -->
+            <div class="card-face card-front" id="card-front" aria-label="Kartu tertutup, tekan tombol untuk membuka">
+              <div class="card-front-content">
+                <div class="card-logo" aria-hidden="true">
+                  <span class="card-logo-dot"></span>
+                  <span class="card-logo-dot"></span>
+                  <span class="card-logo-dot"></span>
+                </div>
+                <p class="card-front-label">DeepTalk</p>
+                <p class="card-front-hint">Tekan tombol di bawah<br/>untuk membuka kartu</p>
+              </div>
+            </div>
+
+            <!-- Card Back (Pertanyaan) -->
+            <div class="card-face card-back" id="card-back" aria-label="Kartu pertanyaan">
+              <div class="card-back-content">
+                <!-- Badge Area -->
+                <div class="card-badges" id="card-badges">
+                  <span class="badge badge-category" id="badge-category" aria-label="Kategori pertanyaan"></span>
+                  <span class="badge badge-depth" id="badge-depth" aria-label="Tingkat kedalaman"></span>
+                </div>
+
+                <!-- Pertanyaan -->
+                <blockquote class="card-question" id="card-question" aria-live="polite">
+                  <!-- Diisi oleh JavaScript -->
+                </blockquote>
+              </div>
+            </div>
+
+          </div><!-- /.card-flipper -->
+        </div><!-- /.card-flip-container -->
+
+      </div><!-- /.card-wrapper -->
+
+      <!-- Action Buttons -->
+      <div class="action-buttons" role="group" aria-label="Tombol Aksi">
+        <!-- Tombol Ambil Kartu (tampil sebelum kartu dibuka) -->
+        <button
+          id="btn-ambil"
+          class="btn btn-primary"
+          aria-label="Ambil satu pertanyaan secara acak"
+        >
+          Ambil Kartu
+        </button>
+
+        <!-- Tombol Pertanyaan Berikutnya (tampil setelah kartu dibuka) -->
+        <button
+          id="btn-berikutnya"
+          class="btn btn-secondary hidden"
+          aria-label="Ambil pertanyaan berikutnya"
+        >
+          Pertanyaan Berikutnya
+        </button>
+
+        <!-- Tombol Reset Sesi -->
+        <button
+          id="btn-reset"
+          class="btn btn-ghost hidden"
+          aria-label="Mulai sesi baru dari awal"
+        >
+          Mulai Sesi Baru
+        </button>
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+      <p class="footer-text">
+        DeepTalk &mdash; Percakapan bermakna dimulai dari satu pertanyaan.
+      </p>
+    </footer>
+
+  </section><!-- /#main-page -->
+
+  <!-- ══════════════════════════════════════════
+       SCRIPTS
+  ══════════════════════════════════════════ -->
+  <script src="data/questions.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
