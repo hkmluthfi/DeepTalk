@@ -18,13 +18,350 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ═══════════════════════════════════════════════════════════════
+       DeepTalk — CSS
+       Sistem desain yang tenang, elegan, dan penuh white space.
+       ═══════════════════════════════════════════════════════════════ */
+
+    /* ─────────────────────────────────────────────
+       1. DESIGN TOKENS
+    ───────────────────────────────────────────── */
+    :root {
+      --color-bg:           #F8F7F4;
+      --color-surface:      #FFFFFF;
+      --color-primary:      #5D5FEF;
+      --color-primary-dark: #4446D0;
+      --color-primary-soft: #EDEDFF;
+      --color-text:         #222222;
+      --color-text-muted:   #888888;
+      --color-text-light:   #BBBBBB;
+      --color-badge-bg:     #F0F0FE;
+      --color-badge-text:   #5D5FEF;
+      --depth-ringan:       #27AE60;
+      --depth-sedang:       #F2C94C;
+      --depth-dalam:        #F2994A;
+      --depth-sangat-dalam: #EB5757;
+      --shadow-sm:    0 2px 8px rgba(0,0,0,0.06);
+      --shadow-md:    0 8px 32px rgba(0,0,0,0.09);
+      --shadow-lg:    0 20px 60px rgba(0,0,0,0.12);
+      --shadow-card:  0 4px 24px rgba(93,95,239,0.08), 0 1px 4px rgba(0,0,0,0.04);
+      --font-family:  'Poppins', sans-serif;
+      --radius-full:  9999px;
+      --radius-lg:    24px;
+      --transition-fast:   0.15s ease;
+      --transition-normal: 0.25s ease;
+      --transition-flip:   0.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+    }
+
+    /* ─────────────────────────────────────────────
+       2. RESET & BASE
+    ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-family);
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: var(--font-family); cursor: pointer; border: none; outline: none; }
+    blockquote { quotes: none; }
+
+    /* ─────────────────────────────────────────────
+       3. PAGE SYSTEM
+    ───────────────────────────────────────────── */
+    .page { display: none; min-height: 100vh; position: relative; }
+    .page.active { display: flex; flex-direction: column; }
+
+    /* ─────────────────────────────────────────────
+       4. LANDING PAGE
+    ───────────────────────────────────────────── */
+    #landing-page { align-items: center; justify-content: center; overflow: hidden; }
+
+    .landing-container {
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; gap: 2rem;
+      padding: 3rem 2rem; position: relative; z-index: 2;
+      max-width: 480px; width: 100%;
+    }
+
+    .brand-icon { display: flex; gap: 6px; justify-content: center; margin-bottom: 0.5rem; }
+    .brand-icon-dot {
+      width: 8px; height: 8px; border-radius: var(--radius-full);
+      background-color: var(--color-primary);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    .brand-icon-dot:nth-child(1) { animation-delay: 0s;   opacity: 0.5; }
+    .brand-icon-dot:nth-child(2) { animation-delay: 0.3s; opacity: 0.7; }
+    .brand-icon-dot:nth-child(3) { animation-delay: 0.6s; opacity: 1;   }
+
+    @keyframes pulse-dot {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.3); opacity: 1; }
+    }
+
+    .landing-title {
+      font-size: clamp(2.8rem, 8vw, 4.5rem); font-weight: 700;
+      letter-spacing: -0.03em; color: var(--color-text); line-height: 1.1;
+    }
+    .landing-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.15rem); font-weight: 300;
+      color: var(--color-text-muted); line-height: 1.75; letter-spacing: 0.01em;
+    }
+    .landing-hint { font-size: 0.78rem; color: var(--color-text-light); letter-spacing: 0.02em; }
+
+    .landing-brand { animation: fade-up 0.7s ease both; }
+    #btn-mulai     { animation: fade-up 0.7s 0.15s ease both; }
+    .landing-hint  { animation: fade-up 0.7s 0.25s ease both; }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Dekorasi bg */
+    .landing-bg-decoration { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+    .deco-circle {
+      position: absolute; border-radius: var(--radius-full);
+      background: radial-gradient(circle, var(--color-primary), transparent 70%); opacity: 0.05;
+    }
+    .deco-circle--1 { width:400px; height:400px; top:-100px; right:-80px;  animation: float-slow 8s  ease-in-out infinite; }
+    .deco-circle--2 { width:280px; height:280px; bottom:40px; left:-60px;  animation: float-slow 10s ease-in-out infinite reverse; }
+    .deco-circle--3 { width:180px; height:180px; top:50%; left:30%; opacity:0.03; animation: float-slow 6s ease-in-out infinite 2s; }
+
+    @keyframes float-slow {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%       { transform: translateY(-20px) scale(1.05); }
+    }
+
+    /* ─────────────────────────────────────────────
+       5. BUTTONS
+    ───────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0.875rem 2.25rem; border-radius: var(--radius-full);
+      font-size: 1rem; font-weight: 500; letter-spacing: 0.01em;
+      transition: background-color var(--transition-normal),
+                  transform var(--transition-fast),
+                  box-shadow var(--transition-normal),
+                  opacity var(--transition-normal);
+    }
+    .btn-primary {
+      background-color: var(--color-primary); color: #FFF;
+      box-shadow: 0 4px 20px rgba(93,95,239,0.3);
+    }
+    .btn-primary:hover  { background-color: var(--color-primary-dark); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(93,95,239,0.4); }
+    .btn-primary:active { transform: translateY(0); box-shadow: 0 2px 10px rgba(93,95,239,0.25); }
+    .btn-large  { padding: 1.1rem 3rem; font-size: 1.05rem; font-weight: 600; }
+    .btn-secondary {
+      background-color: transparent; color: var(--color-primary);
+      border: 2px solid var(--color-primary);
+    }
+    .btn-secondary:hover  { background-color: var(--color-primary-soft); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+    .btn-secondary:active { transform: translateY(0); }
+    .btn-ghost {
+      background-color: transparent; color: var(--color-text-muted);
+      padding: 0.5rem 1.25rem; font-size: 0.875rem;
+    }
+    .btn-ghost:hover { color: var(--color-text); background-color: rgba(0,0,0,0.04); }
+    .hidden { display: none !important; }
+    .btn:disabled, .btn.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; transform: none !important; }
+
+    /* ─────────────────────────────────────────────
+       6. HEADER
+    ───────────────────────────────────────────── */
+    .header {
+      padding: 1rem 2rem;
+      background-color: rgba(248,247,244,0.9);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-inner {
+      max-width: 900px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .header-logo { display: flex; align-items: center; gap: 0.25rem; }
+    .header-logo-dot {
+      width: 8px; height: 8px; border-radius: var(--radius-full);
+      background-color: var(--color-primary); display: inline-block;
+    }
+    .header-logo-text { font-size: 1.15rem; font-weight: 700; color: var(--color-text); letter-spacing: -0.01em; }
+    .header-nav { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-link { font-size: 0.875rem; font-weight: 400; color: var(--color-text-muted); transition: color var(--transition-fast); }
+    .nav-link:hover { color: var(--color-text); }
+
+    /* ─────────────────────────────────────────────
+       7. MAIN CONTENT
+    ───────────────────────────────────────────── */
+    .main-content {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 3rem 2rem; gap: 2rem;
+      max-width: 720px; margin: 0 auto; width: 100%;
+    }
+
+    /* ─────────────────────────────────────────────
+       8. PROGRESS
+    ───────────────────────────────────────────── */
+    .progress-section { text-align: center; }
+    .progress-text {
+      font-size: 0.82rem; color: var(--color-text-muted);
+      font-weight: 400; letter-spacing: 0.03em; text-transform: uppercase;
+    }
+
+    /* ─────────────────────────────────────────────
+       9. FLIP CARD
+    ───────────────────────────────────────────── */
+    .card-wrapper { width: 100%; max-width: 480px; perspective: 1200px; }
+    .card-flip-container { width: 100%; height: 320px; position: relative; }
+    .card-flipper {
+      width: 100%; height: 100%; position: relative;
+      transform-style: preserve-3d;
+      transition: transform var(--transition-flip);
+    }
+    .card-flipper.flipped { transform: rotateY(180deg); }
+    .card-face {
+      position: absolute; inset: 0; border-radius: var(--radius-lg);
+      backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    }
+
+    /* Front */
+    .card-front {
+      background: linear-gradient(145deg, #5D5FEF 0%, #4446D0 100%);
+      box-shadow: var(--shadow-lg);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    }
+    .card-flip-container:hover .card-front {
+      transform: scale(1.015);
+      box-shadow: 0 24px 70px rgba(93,95,239,0.25), 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .card-flipper.flipped .card-front { pointer-events: none; }
+
+    .card-front-content {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 1rem; text-align: center; color: rgba(255,255,255,0.9);
+      padding: 2rem; user-select: none;
+    }
+    .card-logo { display: flex; gap: 5px; }
+    .card-logo-dot { width: 7px; height: 7px; border-radius: var(--radius-full); background-color: rgba(255,255,255,0.7); }
+    .card-front-label { font-size: 1.5rem; font-weight: 700; color: #FFF; letter-spacing: -0.01em; }
+    .card-front-hint  { font-size: 0.82rem; color: rgba(255,255,255,0.6); line-height: 1.7; }
+
+    /* Back */
+    .card-back {
+      background-color: var(--color-surface);
+      box-shadow: var(--shadow-card);
+      transform: rotateY(180deg);
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(0,0,0,0.04);
+      transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    }
+    .card-flipper.flipped:hover .card-back {
+      transform: rotateY(180deg) scale(1.015);
+      box-shadow: var(--shadow-lg);
+    }
+    .card-back-content {
+      padding: 2rem 3rem; display: flex; flex-direction: column;
+      gap: 1.5rem; width: 100%; height: 100%; justify-content: center;
+    }
+    .card-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .card-question {
+      font-size: clamp(1.05rem, 2.5vw, 1.25rem); font-weight: 500;
+      color: var(--color-text); line-height: 1.65;
+      letter-spacing: -0.01em; font-style: normal;
+    }
+    .card-question.animate-in { animation: question-in 0.35s ease both; }
+
+    @keyframes question-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─────────────────────────────────────────────
+       10. BADGES
+    ───────────────────────────────────────────── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: var(--radius-full);
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.03em;
+    }
+    .badge-category { background-color: var(--color-badge-bg); color: var(--color-badge-text); }
+    .badge-depth    { color: #FFF; font-weight: 600; }
+    .badge-depth[data-depth="Ringan"]       { background-color: var(--depth-ringan); }
+    .badge-depth[data-depth="Sedang"]       { background-color: var(--depth-sedang); color: #555; }
+    .badge-depth[data-depth="Dalam"]        { background-color: var(--depth-dalam); }
+    .badge-depth[data-depth="Sangat Dalam"] { background-color: var(--depth-sangat-dalam); }
+    .badge-depth::before {
+      content: ''; display: inline-block; width: 6px; height: 6px;
+      border-radius: var(--radius-full); background-color: rgba(255,255,255,0.6);
+    }
+    .badge-depth[data-depth="Sedang"]::before { background-color: rgba(0,0,0,0.25); }
+
+    /* ─────────────────────────────────────────────
+       11. ACTION BUTTONS
+    ───────────────────────────────────────────── */
+    .action-buttons { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+
+    /* ─────────────────────────────────────────────
+       12. FOOTER
+    ───────────────────────────────────────────── */
+    .footer { padding: 1.5rem 2rem; text-align: center; border-top: 1px solid rgba(0,0,0,0.05); }
+    .footer-text { font-size: 0.78rem; color: var(--color-text-light); letter-spacing: 0.02em; }
+
+    /* ─────────────────────────────────────────────
+       13. SESSION COMPLETE
+    ───────────────────────────────────────────── */
+    .card-back.session-complete { background: linear-gradient(145deg, #f8f7f4 0%, #f0f0fe 100%); }
+    .session-complete-content {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; height: 100%; text-align: center;
+      gap: 1rem; padding: 2rem;
+    }
+    .session-complete-icon    { font-size: 2rem; line-height: 1; }
+    .session-complete-title   { font-size: 1.15rem; font-weight: 600; color: var(--color-text); }
+    .session-complete-subtitle { font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.7; }
+
+    /* ─────────────────────────────────────────────
+       14. RESPONSIVE
+    ───────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .main-content { padding: 2rem 1.5rem; gap: 1.5rem; }
+      .card-flip-container { height: 280px; }
+      .card-back-content { padding: 1.5rem 2rem; }
+      .header { padding: 1rem 1.5rem; }
+    }
+    @media (max-width: 480px) {
+      .main-content { padding: 1.5rem 1rem; gap: 1.5rem; }
+      .card-flip-container { height: 260px; }
+      .card-back-content { padding: 1.5rem; }
+      .card-question { font-size: 1rem; }
+      .header-nav { gap: 1rem; }
+      .btn { padding: 0.8rem 1.75rem; font-size: 0.95rem; }
+      .btn-large { padding: 1rem 2.5rem; }
+      .landing-container { padding: 2rem 1rem; gap: 1.5rem; }
+    }
+    @media (max-width: 360px) {
+      .card-flip-container { height: 240px; }
+      .card-back-content { padding: 1rem; }
+      .card-question { font-size: 0.95rem; }
+      .header-logo-text { font-size: 1rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -33,8 +370,6 @@
   ══════════════════════════════════════════ -->
   <section id="landing-page" class="page active" aria-label="Halaman Pembuka">
     <div class="landing-container">
-
-      <!-- Logo & Branding -->
       <div class="landing-brand">
         <div class="brand-icon" aria-hidden="true">
           <span class="brand-icon-dot"></span>
@@ -46,21 +381,11 @@
           Setiap percakapan yang bermakna<br />dimulai dari satu pertanyaan.
         </p>
       </div>
-
-      <!-- CTA Button -->
-      <button
-        id="btn-mulai"
-        class="btn btn-primary btn-large"
-        aria-label="Mulai menggunakan DeepTalk"
-      >
+      <button id="btn-mulai" class="btn btn-primary btn-large" aria-label="Mulai menggunakan DeepTalk">
         Mulai
       </button>
-
-      <!-- Dekoratif kecil -->
       <p class="landing-hint">220+ pertanyaan &bull; 10 kategori &bull; 4 tingkat kedalaman</p>
     </div>
-
-    <!-- Dekoratif background -->
     <div class="landing-bg-decoration" aria-hidden="true">
       <div class="deco-circle deco-circle--1"></div>
       <div class="deco-circle deco-circle--2"></div>
@@ -73,7 +398,6 @@
   ══════════════════════════════════════════ -->
   <section id="main-page" class="page" aria-label="Halaman Utama DeepTalk">
 
-    <!-- Header -->
     <header class="header" role="banner">
       <div class="header-inner">
         <div class="header-logo" role="img" aria-label="DeepTalk Logo">
@@ -87,23 +411,18 @@
       </div>
     </header>
 
-    <!-- Main Content -->
     <main class="main-content" role="main">
 
-      <!-- Progress Counter -->
       <div class="progress-section" aria-live="polite" aria-atomic="true">
         <p class="progress-text" id="progress-text">Siap membuka kartu pertama</p>
       </div>
 
-      <!-- Card Area -->
       <div class="card-wrapper" role="region" aria-label="Kartu Pertanyaan">
-
-        <!-- Flip Card Container -->
         <div class="card-flip-container" id="card-flip-container">
           <div class="card-flipper" id="card-flipper" aria-live="polite">
 
-            <!-- Card Front (Tertutup) -->
-            <div class="card-face card-front" id="card-front" aria-label="Kartu tertutup, tekan tombol untuk membuka">
+            <!-- Front -->
+            <div class="card-face card-front" id="card-front" aria-label="Kartu tertutup">
               <div class="card-front-content">
                 <div class="card-logo" aria-hidden="true">
                   <span class="card-logo-dot"></span>
@@ -115,72 +434,454 @@
               </div>
             </div>
 
-            <!-- Card Back (Pertanyaan) -->
+            <!-- Back -->
             <div class="card-face card-back" id="card-back" aria-label="Kartu pertanyaan">
               <div class="card-back-content">
-                <!-- Badge Area -->
                 <div class="card-badges" id="card-badges">
                   <span class="badge badge-category" id="badge-category" aria-label="Kategori pertanyaan"></span>
-                  <span class="badge badge-depth" id="badge-depth" aria-label="Tingkat kedalaman"></span>
+                  <span class="badge badge-depth"    id="badge-depth"    aria-label="Tingkat kedalaman"></span>
                 </div>
-
-                <!-- Pertanyaan -->
-                <blockquote class="card-question" id="card-question" aria-live="polite">
-                  <!-- Diisi oleh JavaScript -->
-                </blockquote>
+                <blockquote class="card-question" id="card-question" aria-live="polite"></blockquote>
               </div>
             </div>
 
-          </div><!-- /.card-flipper -->
-        </div><!-- /.card-flip-container -->
+          </div>
+        </div>
+      </div>
 
-      </div><!-- /.card-wrapper -->
-
-      <!-- Action Buttons -->
       <div class="action-buttons" role="group" aria-label="Tombol Aksi">
-        <!-- Tombol Ambil Kartu (tampil sebelum kartu dibuka) -->
-        <button
-          id="btn-ambil"
-          class="btn btn-primary"
-          aria-label="Ambil satu pertanyaan secara acak"
-        >
-          Ambil Kartu
-        </button>
-
-        <!-- Tombol Pertanyaan Berikutnya (tampil setelah kartu dibuka) -->
-        <button
-          id="btn-berikutnya"
-          class="btn btn-secondary hidden"
-          aria-label="Ambil pertanyaan berikutnya"
-        >
-          Pertanyaan Berikutnya
-        </button>
-
-        <!-- Tombol Reset Sesi -->
-        <button
-          id="btn-reset"
-          class="btn btn-ghost hidden"
-          aria-label="Mulai sesi baru dari awal"
-        >
-          Mulai Sesi Baru
-        </button>
+        <button id="btn-ambil"      class="btn btn-primary"            aria-label="Ambil satu pertanyaan secara acak">Ambil Kartu</button>
+        <button id="btn-berikutnya" class="btn btn-secondary hidden"   aria-label="Ambil pertanyaan berikutnya">Pertanyaan Berikutnya</button>
+        <button id="btn-reset"      class="btn btn-ghost hidden"       aria-label="Mulai sesi baru">Mulai Sesi Baru</button>
       </div>
 
     </main>
 
-    <!-- Footer -->
     <footer class="footer" role="contentinfo">
-      <p class="footer-text">
-        DeepTalk &mdash; Percakapan bermakna dimulai dari satu pertanyaan.
-      </p>
+      <p class="footer-text">DeepTalk &mdash; Percakapan bermakna dimulai dari satu pertanyaan.</p>
     </footer>
 
-  </section><!-- /#main-page -->
+  </section>
 
-  <!-- ══════════════════════════════════════════
-       SCRIPTS
-  ══════════════════════════════════════════ -->
-  <script src="data/questions.js"></script>
-  <script src="script.js"></script>
+  <script>
+    /* ═══════════════════════════════════════════════════════════
+       DeepTalk — DATA: 220 Pertanyaan dari 10 Kategori
+       Format: { category, depth, question }
+       Depth: "Ringan" | "Sedang" | "Dalam" | "Sangat Dalam"
+       ═══════════════════════════════════════════════════════════ */
+    const questions = [
+
+      // ICE BREAKER (22)
+      { category:"Ice Breaker", depth:"Ringan",  question:"Kalau kamu bisa makan satu makanan seumur hidup tanpa bosan, apa pilihanmu?" },
+      { category:"Ice Breaker", depth:"Ringan",  question:"Apa hal pertama yang kamu lakukan setiap pagi?" },
+      { category:"Ice Breaker", depth:"Ringan",  question:"Tim mana yang selalu kamu dukung — kucing atau anjing?" },
+      { category:"Ice Breaker", depth:"Ringan",  question:"Lagu apa yang sering kamu putar ulang belakangan ini?" },
+      { category:"Ice Breaker", depth:"Ringan",  question:"Kalau hidupmu dijadikan film, genre apa yang paling cocok?" },
+      { category:"Ice Breaker", depth:"Ringan",  question:"Hal kecil apa yang selalu berhasil membuatmu tersenyum?" },
+      { category:"Ice Breaker", depth:"Ringan",  question:"Kamu lebih suka liburan ke pantai atau ke pegunungan?" },
+      { category:"Ice Breaker", depth:"Ringan",  question:"Apa hobi yang ingin kamu coba tapi belum sempat?" },
+      { category:"Ice Breaker", depth:"Ringan",  question:"Kalau kamu punya satu hari bebas tanpa tanggung jawab, kamu mau apa?" },
+      { category:"Ice Breaker", depth:"Ringan",  question:"Buku, film, atau serial apa yang terakhir kamu nikmati?" },
+      { category:"Ice Breaker", depth:"Ringan",  question:"Minuman apa yang paling sering ada di meja kerjamu?" },
+      { category:"Ice Breaker", depth:"Ringan",  question:"Apa kata orang-orang terdekat yang paling sering menggambarkanmu?" },
+      { category:"Ice Breaker", depth:"Sedang",  question:"Apakah kamu tipe orang yang suka merencanakan sesuatu atau lebih suka spontan?" },
+      { category:"Ice Breaker", depth:"Sedang",  question:"Hal apa yang paling sering membuat rencana harianmu berantakan?" },
+      { category:"Ice Breaker", depth:"Sedang",  question:"Kebiasaan apa yang kamu miliki yang mungkin tidak disadari orang lain?" },
+      { category:"Ice Breaker", depth:"Sedang",  question:"Apa satu kemampuan tersembunyi yang dimilikimu yang jarang orang tahu?" },
+      { category:"Ice Breaker", depth:"Sedang",  question:"Kalau kamu bisa belajar satu hal baru dalam semalam, apa pilihanmu?" },
+      { category:"Ice Breaker", depth:"Sedang",  question:"Apakah kamu lebih produktif di pagi hari atau malam hari?" },
+      { category:"Ice Breaker", depth:"Sedang",  question:"Apa hal yang menurutmu remeh tapi ternyata sangat penting dalam hidupmu?" },
+      { category:"Ice Breaker", depth:"Sedang",  question:"Perjalanan singkat ke mana yang paling berkesan bagimu?" },
+      { category:"Ice Breaker", depth:"Sedang",  question:"Apa satu kebiasaan baik yang ingin kamu bentuk tahun ini?" },
+      { category:"Ice Breaker", depth:"Sedang",  question:"Apakah ada hal yang dulu kamu benci tapi sekarang kamu sukai?" },
+
+      // REFLEKSI DIRI (22)
+      { category:"Refleksi Diri", depth:"Sedang",      question:"Apa hal yang paling membuatmu bangga tahun ini?" },
+      { category:"Refleksi Diri", depth:"Sedang",      question:"Versi dirimu yang mana yang paling ingin kamu tinggalkan?" },
+      { category:"Refleksi Diri", depth:"Sedang",      question:"Apa yang selalu ingin kamu katakan pada dirimu sendiri tapi jarang kamu lakukan?" },
+      { category:"Refleksi Diri", depth:"Dalam",       question:"Ketakutan terbesar apa yang paling sering menghentikan langkahmu?" },
+      { category:"Refleksi Diri", depth:"Dalam",       question:"Kapan terakhir kali kamu benar-benar jujur pada dirimu sendiri?" },
+      { category:"Refleksi Diri", depth:"Dalam",       question:"Apa pelajaran terbesar yang kamu pelajari dari kesalahan terbesarmu?" },
+      { category:"Refleksi Diri", depth:"Dalam",       question:"Apakah ada bagian dari dirimu yang kamu sembunyikan dari orang lain?" },
+      { category:"Refleksi Diri", depth:"Sangat Dalam",question:"Kalau kamu bisa mengubah satu keputusan dalam hidupmu, keputusan mana itu?" },
+      { category:"Refleksi Diri", depth:"Sangat Dalam",question:"Siapa dirimu jika tidak ada yang memperhatikanmu?" },
+      { category:"Refleksi Diri", depth:"Sangat Dalam",question:"Apa yang benar-benar membuatmu merasa hidup?" },
+      { category:"Refleksi Diri", depth:"Sedang",      question:"Nilai apa dari dirimu yang ingin kamu tingkatkan dalam enam bulan ke depan?" },
+      { category:"Refleksi Diri", depth:"Sedang",      question:"Apakah kamu menjalani hidup sesuai dengan apa yang benar-benar kamu inginkan?" },
+      { category:"Refleksi Diri", depth:"Dalam",       question:"Momen apa dalam hidupmu yang paling mengubah cara pandangmu?" },
+      { category:"Refleksi Diri", depth:"Dalam",       question:"Apa yang paling sering membuatmu merasa tidak cukup baik?" },
+      { category:"Refleksi Diri", depth:"Ringan",      question:"Kata apa yang paling ingin menggambarkan dirimu saat ini?" },
+      { category:"Refleksi Diri", depth:"Ringan",      question:"Apa pencapaian kecil yang kamu rayakan belakangan ini?" },
+      { category:"Refleksi Diri", depth:"Sangat Dalam",question:"Apakah kamu sudah memaafkan dirimu sendiri atas kesalahan masa lalu?" },
+      { category:"Refleksi Diri", depth:"Dalam",       question:"Apa yang kamu korbankan demi ekspektasi orang lain?" },
+      { category:"Refleksi Diri", depth:"Sedang",      question:"Apa hal yang paling sering kamu tunda dan mengapa?" },
+      { category:"Refleksi Diri", depth:"Sedang",      question:"Siapa satu orang yang paling banyak membentuk kepribadianmu?" },
+      { category:"Refleksi Diri", depth:"Dalam",       question:"Apakah ada versi dirimu yang sudah kamu hilangkan dan kamu rindukan?" },
+      { category:"Refleksi Diri", depth:"Sangat Dalam",question:"Jika kamu bisa berbicara dengan dirimu 10 tahun lalu, apa yang akan kamu katakan?" },
+
+      // PERTEMANAN (22)
+      { category:"Pertemanan", depth:"Ringan",       question:"Apa hal konyol yang sering kamu dan teman lakukannya bersama?" },
+      { category:"Pertemanan", depth:"Ringan",       question:"Siapa teman yang selalu tahu cara membuatmu tertawa?" },
+      { category:"Pertemanan", depth:"Sedang",       question:"Kualitas apa yang paling kamu hargai dari seorang sahabat?" },
+      { category:"Pertemanan", depth:"Sedang",       question:"Pernahkah kamu kehilangan teman dekat karena perbedaan pendapat? Bagaimana rasanya?" },
+      { category:"Pertemanan", depth:"Sedang",       question:"Apakah kamu tipe orang yang punya banyak teman atau sedikit teman yang sangat dekat?" },
+      { category:"Pertemanan", depth:"Dalam",        question:"Apakah ada persahabatan yang kamu sesali tidak kamu jaga?" },
+      { category:"Pertemanan", depth:"Dalam",        question:"Hal apa yang paling sulit kamu ungkapkan kepada teman terdekatmu?" },
+      { category:"Pertemanan", depth:"Dalam",        question:"Kapan kamu merasa paling kesepian meskipun sedang bersama orang banyak?" },
+      { category:"Pertemanan", depth:"Sangat Dalam", question:"Apakah ada teman yang kamu rasa mengenal versi terbaikmu, bahkan lebih dari dirimu sendiri?" },
+      { category:"Pertemanan", depth:"Sangat Dalam", question:"Apa hal yang membuat kamu sulit mempercayai orang baru sepenuhnya?" },
+      { category:"Pertemanan", depth:"Ringan",       question:"Apa kebiasaan unik yang hanya ada di lingkaran pertemananmu?" },
+      { category:"Pertemanan", depth:"Sedang",       question:"Bagaimana kamu tahu kalau seseorang benar-benar peduli padamu?" },
+      { category:"Pertemanan", depth:"Sedang",       question:"Apakah kamu mudah memaafkan teman yang mengecewakan kamu?" },
+      { category:"Pertemanan", depth:"Ringan",       question:"Apa momen pertemanan yang paling kamu tertawakan setiap kali diingat?" },
+      { category:"Pertemanan", depth:"Dalam",        question:"Apakah ada hal yang sudah lama ingin kamu ucapkan kepada seseorang tapi belum berani?" },
+      { category:"Pertemanan", depth:"Sedang",       question:"Kamu lebih suka punya teman yang selalu jujur atau yang selalu mendukung?" },
+      { category:"Pertemanan", depth:"Dalam",        question:"Pernahkah kamu merasa ditinggal oleh seseorang yang kamu anggap sahabat?" },
+      { category:"Pertemanan", depth:"Sangat Dalam", question:"Apa standar persahabatan yang kamu pegang dan tidak bisa kamu kompromikan?" },
+      { category:"Pertemanan", depth:"Sedang",       question:"Apa yang biasanya kamu lakukan ketika merasa pertemanan sedang renggang?" },
+      { category:"Pertemanan", depth:"Ringan",       question:"Siapa teman yang paling berbeda darimu tapi tetap nyaman untuk diajak ngobrol?" },
+      { category:"Pertemanan", depth:"Dalam",        question:"Apa satu hal yang kamu harap bisa kamu katakan kepada teman lama yang sudah menghilang?" },
+      { category:"Pertemanan", depth:"Sangat Dalam", question:"Apakah kamu pernah berpura-pura baik-baik saja di depan teman padahal tidak?" },
+
+      // PASANGAN (22)
+      { category:"Pasangan", depth:"Ringan",       question:"Apa hal kecil dari pasanganmu yang selalu membuatmu tersenyum?" },
+      { category:"Pasangan", depth:"Ringan",       question:"Ritual kecil apa yang ada di antara kamu dan pasanganmu?" },
+      { category:"Pasangan", depth:"Sedang",       question:"Apa bahasa kasih yang paling kamu butuhkan dari pasangan?" },
+      { category:"Pasangan", depth:"Sedang",       question:"Bagaimana caramu menunjukkan rasa cinta tanpa kata-kata?" },
+      { category:"Pasangan", depth:"Sedang",       question:"Apa yang kamu pelajari tentang dirimu dari hubungan yang kamu jalani?" },
+      { category:"Pasangan", depth:"Dalam",        question:"Hal apa yang paling sulit kamu komunikasikan dalam hubungan?" },
+      { category:"Pasangan", depth:"Dalam",        question:"Apa ketakutan terbesarmu dalam sebuah hubungan jangka panjang?" },
+      { category:"Pasangan", depth:"Dalam",        question:"Apakah kamu merasa bisa menjadi dirimu sendiri sepenuhnya dalam hubungan?" },
+      { category:"Pasangan", depth:"Sangat Dalam", question:"Apa yang membuatmu bertahan dalam hubungan di saat paling sulit?" },
+      { category:"Pasangan", depth:"Sangat Dalam", question:"Apakah kamu pernah mencintai seseorang dengan cara yang kamu sesali?" },
+      { category:"Pasangan", depth:"Sedang",       question:"Menurutmu, apa perbedaan antara cinta dan kenyamanan?" },
+      { category:"Pasangan", depth:"Ringan",       question:"Tempat kencan sederhana mana yang paling kamu suka?" },
+      { category:"Pasangan", depth:"Dalam",        question:"Bagaimana caramu merawat hubungan di saat kamu sedang kehabisan energi?" },
+      { category:"Pasangan", depth:"Sangat Dalam", question:"Pernahkah kamu memilih seseorang yang salah karena takut sendirian?" },
+      { category:"Pasangan", depth:"Sedang",       question:"Apa hal yang paling kamu hargai dari pasanganmu selain penampilan fisik?" },
+      { category:"Pasangan", depth:"Ringan",       question:"Ceritakan satu momen konyol yang tak terlupakan bersama pasanganmu." },
+      { category:"Pasangan", depth:"Dalam",        question:"Apakah ada ekspektasi dalam hubungan yang kamu sadari tidak realistis?" },
+      { category:"Pasangan", depth:"Sangat Dalam", question:"Apa yang tidak bisa kamu maafkan dalam sebuah hubungan?" },
+      { category:"Pasangan", depth:"Sedang",       question:"Bagaimana kamu mengetahui bahwa seseorang adalah orang yang tepat untukmu?" },
+      { category:"Pasangan", depth:"Ringan",       question:"Apa aktivitas yang paling kamu nikmati dilakukan bersama pasangan?" },
+      { category:"Pasangan", depth:"Dalam",        question:"Apa pelajaran terbesar yang kamu dapat dari hubungan yang sudah berakhir?" },
+      { category:"Pasangan", depth:"Sangat Dalam", question:"Apakah kamu percaya bahwa cinta bisa bertahan seumur hidup?" },
+
+      // KELUARGA (22)
+      { category:"Keluarga", depth:"Ringan",       question:"Apa tradisi keluarga favoritmu saat merayakan hari besar?" },
+      { category:"Keluarga", depth:"Ringan",       question:"Apa cerita keluarga yang selalu diulang di setiap pertemuan?" },
+      { category:"Keluarga", depth:"Sedang",       question:"Pelajaran hidup apa yang paling berkesan dari orang tuamu?" },
+      { category:"Keluarga", depth:"Sedang",       question:"Kebiasaan apa dari keluargamu yang tidak sadar kamu bawa hingga dewasa?" },
+      { category:"Keluarga", depth:"Sedang",       question:"Bagaimana keluargamu membentuk cara pandangmu tentang dunia?" },
+      { category:"Keluarga", depth:"Dalam",        question:"Apakah ada hal yang ingin kamu ubah dari cara kamu dibesarkan?" },
+      { category:"Keluarga", depth:"Dalam",        question:"Apa yang paling sulit kamu ungkapkan kepada anggota keluargamu?" },
+      { category:"Keluarga", depth:"Dalam",        question:"Apakah ada konflik keluarga yang sampai sekarang belum terselesaikan?" },
+      { category:"Keluarga", depth:"Sangat Dalam", question:"Kalau kamu bisa jujur sepenuhnya kepada orang tuamu, apa yang ingin kamu katakan?" },
+      { category:"Keluarga", depth:"Sangat Dalam", question:"Apakah kamu merasa benar-benar dimengerti oleh keluargamu?" },
+      { category:"Keluarga", depth:"Ringan",       question:"Siapa anggota keluarga yang paling sering membuatmu tertawa?" },
+      { category:"Keluarga", depth:"Sedang",       question:"Apa yang paling kamu syukuri dari keluargamu?" },
+      { category:"Keluarga", depth:"Dalam",        question:"Bagaimana ekspektasi keluarga memengaruhi keputusan besar dalam hidupmu?" },
+      { category:"Keluarga", depth:"Ringan",       question:"Masakan apa dari keluarga yang paling kamu rindukan?" },
+      { category:"Keluarga", depth:"Sangat Dalam", question:"Apakah ada luka dari masa kecil yang masih kamu rasakan hingga sekarang?" },
+      { category:"Keluarga", depth:"Sedang",       question:"Apa nilai keluarga yang paling ingin kamu wariskan kepada generasi berikutnya?" },
+      { category:"Keluarga", depth:"Dalam",        question:"Apakah ada anggota keluarga yang kamu ingin hubungannya lebih dekat?" },
+      { category:"Keluarga", depth:"Sangat Dalam", question:"Apa hal yang belum sempat kamu katakan kepada seseorang yang sudah tiada?" },
+      { category:"Keluarga", depth:"Sedang",       question:"Peran apa yang biasanya kamu mainkan dalam dinamika keluargamu?" },
+      { category:"Keluarga", depth:"Ringan",       question:"Apa aktivitas keluarga yang paling sering kamu lakukan waktu kecil?" },
+      { category:"Keluarga", depth:"Dalam",        question:"Apa pola pikir keluarga yang ingin kamu hentikan di generasimu?" },
+      { category:"Keluarga", depth:"Sedang",       question:"Bagaimana caramu menunjukkan rasa cinta kepada anggota keluargamu?" },
+
+      // MIMPI & TUJUAN (22)
+      { category:"Mimpi & Tujuan", depth:"Ringan",       question:"Kalau tidak ada batasan, kamu ingin tinggal di kota atau negara mana?" },
+      { category:"Mimpi & Tujuan", depth:"Ringan",       question:"Apa satu hal yang ingin kamu capai sebelum akhir tahun ini?" },
+      { category:"Mimpi & Tujuan", depth:"Sedang",       question:"Apa mimpi yang pernah kamu tinggalkan dan masih terasa menggantung di pikiranmu?" },
+      { category:"Mimpi & Tujuan", depth:"Sedang",       question:"Kesuksesan seperti apa yang benar-benar kamu inginkan, bukan yang diinginkan orang lain?" },
+      { category:"Mimpi & Tujuan", depth:"Sedang",       question:"Apa yang menghalangi kamu untuk memulai sesuatu yang sudah lama kamu impikan?" },
+      { category:"Mimpi & Tujuan", depth:"Dalam",        question:"Apakah tujuan hidupmu saat ini benar-benar milikmu atau milik orang lain?" },
+      { category:"Mimpi & Tujuan", depth:"Dalam",        question:"Apa yang akan kamu lakukan jika kamu tahu tidak mungkin gagal?" },
+      { category:"Mimpi & Tujuan", depth:"Dalam",        question:"Warisan apa yang ingin kamu tinggalkan untuk dunia?" },
+      { category:"Mimpi & Tujuan", depth:"Sangat Dalam", question:"Apakah kamu takut mencapai impianmu dan kemudian merasa kosong?" },
+      { category:"Mimpi & Tujuan", depth:"Sangat Dalam", question:"Apa yang akan kamu sesali jika tidak kamu coba sebelum meninggal?" },
+      { category:"Mimpi & Tujuan", depth:"Ringan",       question:"Skill baru apa yang paling ingin kamu kuasai dalam setahun ke depan?" },
+      { category:"Mimpi & Tujuan", depth:"Sedang",       question:"Apakah ada impian yang kamu simpan sendiri karena takut dihakimi orang lain?" },
+      { category:"Mimpi & Tujuan", depth:"Dalam",        question:"Apa yang kamu bayangkan ketika membayangkan versi terbaik dari hidupmu?" },
+      { category:"Mimpi & Tujuan", depth:"Ringan",       question:"Buku apa yang paling ingin kamu tulis jika kamu seorang penulis?" },
+      { category:"Mimpi & Tujuan", depth:"Sedang",       question:"Apa satu langkah konkret yang bisa kamu ambil hari ini menuju impianmu?" },
+      { category:"Mimpi & Tujuan", depth:"Dalam",        question:"Apakah kamu percaya bahwa kamu pantas mendapatkan semua yang kamu impikan?" },
+      { category:"Mimpi & Tujuan", depth:"Sangat Dalam", question:"Apakah hidupmu saat ini mencerminkan siapa yang benar-benar ingin kamu jadi?" },
+      { category:"Mimpi & Tujuan", depth:"Sedang",       question:"Siapa yang paling menginspirasimu dalam mengejar tujuan hidup?" },
+      { category:"Mimpi & Tujuan", depth:"Ringan",       question:"Kalau kamu bisa menguasai satu bahasa baru instan, bahasa apa pilihanmu?" },
+      { category:"Mimpi & Tujuan", depth:"Sangat Dalam", question:"Apa yang membuat kamu masih mau bangun setiap hari dan terus berusaha?" },
+      { category:"Mimpi & Tujuan", depth:"Dalam",        question:"Apa yang kamu definisikan sebagai hidup yang bermakna?" },
+      { category:"Mimpi & Tujuan", depth:"Sedang",       question:"Apakah ada impian masa kecil yang masih ingin kamu wujudkan?" },
+
+      // MASA KECIL (22)
+      { category:"Masa Kecil", depth:"Ringan",       question:"Permainan apa yang paling sering kamu mainkan saat kecil?" },
+      { category:"Masa Kecil", depth:"Ringan",       question:"Apa makanan jajanan masa kecil yang paling kamu rindukan?" },
+      { category:"Masa Kecil", depth:"Ringan",       question:"Siapa tokoh kartun atau idola masa kecil favoritmu?" },
+      { category:"Masa Kecil", depth:"Ringan",       question:"Apa aktivitas favoritmu saat liburan sekolah dulu?" },
+      { category:"Masa Kecil", depth:"Sedang",       question:"Apa kenangan terbaik yang kamu miliki dari masa kecilmu?" },
+      { category:"Masa Kecil", depth:"Sedang",       question:"Siapa guru yang paling berkesan dan mengapa?" },
+      { category:"Masa Kecil", depth:"Sedang",       question:"Apa cita-cita masa kecilmu yang paling berbeda dari hidupmu sekarang?" },
+      { category:"Masa Kecil", depth:"Sedang",       question:"Apa momen malu-maluin di masa kecil yang sekarang bisa kamu tertawakan?" },
+      { category:"Masa Kecil", depth:"Dalam",        question:"Apa hal yang kamu dapatkan di masa kecil yang sangat membentuk karaktermu sekarang?" },
+      { category:"Masa Kecil", depth:"Dalam",        question:"Apakah ada hal yang ingin kamu alami di masa kecil tapi tidak sempat?" },
+      { category:"Masa Kecil", depth:"Dalam",        question:"Apa ketakutan masa kecil yang masih sedikit kamu rasakan hingga kini?" },
+      { category:"Masa Kecil", depth:"Sangat Dalam", question:"Apakah ada momen dari masa kecil yang kamu rasa mengubahmu secara mendalam?" },
+      { category:"Masa Kecil", depth:"Sangat Dalam", question:"Apakah anak kecil yang ada dalam dirimu sudah merasa aman dan dicintai sekarang?" },
+      { category:"Masa Kecil", depth:"Ringan",       question:"Apa buku cerita atau dongeng favorit di masa kecilmu?" },
+      { category:"Masa Kecil", depth:"Sedang",       question:"Bagaimana lingkungan tempat kamu tumbuh memengaruhi kepribadianmu?" },
+      { category:"Masa Kecil", depth:"Ringan",       question:"Apa hadiah terbaik yang pernah kamu terima saat kecil?" },
+      { category:"Masa Kecil", depth:"Dalam",        question:"Siapa orang dewasa selain orang tua yang paling berpengaruh di masa kecilmu?" },
+      { category:"Masa Kecil", depth:"Sedang",       question:"Apa hal yang diajarkan masa kecilmu yang sekarang kamu sadari keliru?" },
+      { category:"Masa Kecil", depth:"Sangat Dalam", question:"Apa yang diinginkan anak kecil dalam dirimu yang belum terpenuhi?" },
+      { category:"Masa Kecil", depth:"Ringan",       question:"Apa tempat favorit bermainmu saat kecil?" },
+      { category:"Masa Kecil", depth:"Sedang",       question:"Bagaimana dirimu saat ini berbeda dari yang kamu bayangkan saat kecil?" },
+      { category:"Masa Kecil", depth:"Dalam",        question:"Apakah ada momen masa kecil yang ingin kamu kunjungi kembali meskipun hanya sebentar?" },
+
+      // NILAI HIDUP (22)
+      { category:"Nilai Hidup", depth:"Sedang",       question:"Apa tiga nilai yang paling mendasar dalam hidupmu?" },
+      { category:"Nilai Hidup", depth:"Sedang",       question:"Apa hal yang tidak akan pernah kamu kompromikan demi uang atau popularitas?" },
+      { category:"Nilai Hidup", depth:"Sedang",       question:"Bagaimana cara kamu memutuskan mana yang benar dan salah dalam situasi sulit?" },
+      { category:"Nilai Hidup", depth:"Dalam",        question:"Apakah ada nilai yang kamu pegang sekarang yang berbeda dari 5 tahun lalu?" },
+      { category:"Nilai Hidup", depth:"Dalam",        question:"Apa yang kamu lakukan saat nilai hidupmu bertentangan dengan keputusan orang-orang terdekatmu?" },
+      { category:"Nilai Hidup", depth:"Dalam",        question:"Seberapa sering kamu mengorbankan prinsipmu demi ketenangan situasi?" },
+      { category:"Nilai Hidup", depth:"Sangat Dalam", question:"Apakah nilai-nilai yang kamu pegang benar-benar milikmu atau warisan dari lingkungan?" },
+      { category:"Nilai Hidup", depth:"Sangat Dalam", question:"Apa hal yang kamu anggap lebih penting dari kebahagiaan pribadi?" },
+      { category:"Nilai Hidup", depth:"Ringan",       question:"Apa quotes atau kalimat yang paling sering mengingatkanmu kembali ke jalur?" },
+      { category:"Nilai Hidup", depth:"Ringan",       question:"Apa definisi pribadi kamu tentang kesuksesan?" },
+      { category:"Nilai Hidup", depth:"Sedang",       question:"Apa yang lebih penting bagimu: menjadi kaya atau menjadi bebas?" },
+      { category:"Nilai Hidup", depth:"Dalam",        question:"Kapan terakhir kali kamu bertindak bertentangan dengan nilai yang kamu percaya?" },
+      { category:"Nilai Hidup", depth:"Sedang",       question:"Apakah kamu percaya bahwa setiap orang pada dasarnya baik?" },
+      { category:"Nilai Hidup", depth:"Sangat Dalam", question:"Apa yang kamu lakukan ketika merasa kehilangan arah dalam hidup?" },
+      { category:"Nilai Hidup", depth:"Ringan",       question:"Apa satu hal yang kamu lakukan untuk menjaga integritas sehari-hari?" },
+      { category:"Nilai Hidup", depth:"Sedang",       question:"Seberapa besar pengaruh opini orang lain terhadap keputusanmu?" },
+      { category:"Nilai Hidup", depth:"Dalam",        question:"Apakah ada hal yang kamu yakini dulu tapi sekarang kamu pertanyakan?" },
+      { category:"Nilai Hidup", depth:"Sangat Dalam", question:"Apakah kamu menjalani hidup yang selaras dengan nilai-nilai yang kamu percaya?" },
+      { category:"Nilai Hidup", depth:"Sedang",       question:"Kejujuran atau kebaikan — mana yang kamu prioritaskan ketika keduanya bertentangan?" },
+      { category:"Nilai Hidup", depth:"Ringan",       question:"Apa kebiasaan harian yang menurut kamu paling mencerminkan siapa kamu?" },
+      { category:"Nilai Hidup", depth:"Dalam",        question:"Apakah kamu hidup sesuai dengan nilai yang kamu ajarkan kepada orang lain?" },
+      { category:"Nilai Hidup", depth:"Sangat Dalam", question:"Apa yang akan kamu lakukan berbeda jika kamu tahu ini adalah hari terakhirmu?" },
+
+      // FILOSOFI (22)
+      { category:"Filosofi", depth:"Sedang",       question:"Menurutmu, apa tujuan utama dari kehidupan manusia?" },
+      { category:"Filosofi", depth:"Sedang",       question:"Apakah manusia dilahirkan baik atau jahat, menurutmu?" },
+      { category:"Filosofi", depth:"Sedang",       question:"Apakah kebahagiaan itu pilihan atau hasil dari keadaan?" },
+      { category:"Filosofi", depth:"Dalam",        question:"Apakah kamu percaya takdir atau kamu percaya bahwa manusia sepenuhnya bebas?" },
+      { category:"Filosofi", depth:"Dalam",        question:"Apa arti kebebasan sejati menurutmu?" },
+      { category:"Filosofi", depth:"Dalam",        question:"Apakah waktu itu nyata, atau hanya konstruksi pikiran manusia?" },
+      { category:"Filosofi", depth:"Sangat Dalam", question:"Apa yang terjadi pada kesadaranmu setelah kamu tiada?" },
+      { category:"Filosofi", depth:"Sangat Dalam", question:"Jika realitas adalah ilusi, apakah masih ada hal yang benar-benar penting?" },
+      { category:"Filosofi", depth:"Ringan",       question:"Apakah kamu lebih takut mati terlalu cepat atau hidup terlalu lama?" },
+      { category:"Filosofi", depth:"Ringan",       question:"Apakah kamu percaya bahwa setiap kejadian memiliki alasan tersembunyi?" },
+      { category:"Filosofi", depth:"Sedang",       question:"Apakah kejujuran selalu merupakan pilihan yang tepat?" },
+      { category:"Filosofi", depth:"Dalam",        question:"Apa yang menurutmu membedakan manusia dari makhluk lainnya?" },
+      { category:"Filosofi", depth:"Sedang",       question:"Apakah mungkin seseorang benar-benar objektif dalam menilai sesuatu?" },
+      { category:"Filosofi", depth:"Sangat Dalam", question:"Apakah hidupmu punya makna yang lebih besar dari yang kamu sadari?" },
+      { category:"Filosofi", depth:"Dalam",        question:"Menurutmu, apakah manusia pada dasarnya kesepian?" },
+      { category:"Filosofi", depth:"Sedang",       question:"Apakah keadilan sejati mungkin ada di dunia ini?" },
+      { category:"Filosofi", depth:"Sangat Dalam", question:"Apakah kamu takut menjadi tidak relevan dan terlupakan seiring waktu?" },
+      { category:"Filosofi", depth:"Dalam",        question:"Apa yang menurutmu paling disalahpahami orang tentang kebahagiaan?" },
+      { category:"Filosofi", depth:"Ringan",       question:"Kalau kamu bisa tanya satu pertanyaan dan mendapat jawaban jujur dari siapapun, apa pertanyaanmu?" },
+      { category:"Filosofi", depth:"Sedang",       question:"Apakah kamu percaya bahwa setiap orang memiliki kemampuan berubah menjadi lebih baik?" },
+      { category:"Filosofi", depth:"Sangat Dalam", question:"Apakah kamu sudah menemukan alasan mengapa kamu ada di sini?" },
+      { category:"Filosofi", depth:"Dalam",        question:"Apa yang akan kamu pilih: menjalani hidup panjang yang biasa atau hidup singkat yang luar biasa?" },
+
+      // MENDALAM (22)
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Kapan terakhir kali kamu merasa benar-benar tenang dan utuh?" },
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Apa yang paling kamu takutkan orang lain tahu tentangmu?" },
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Apakah ada versi dirimu yang kamu sembunyikan dari semua orang?" },
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Apa hal yang belum pernah kamu katakan kepada siapapun?" },
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Apakah kamu merasa cukup dicintai dalam hidupmu?" },
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Apa yang paling kamu takutkan terjadi dalam lima tahun ke depan?" },
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Apakah ada luka yang kamu pikir tidak bisa sembuh?" },
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Kapan terakhir kali kamu menangis, dan apa yang membuatmu menangis?" },
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Apa yang paling kamu rindukan dari dirimu yang dulu?" },
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Apakah kamu pernah merasa sangat lelah dengan segalanya?" },
+      { category:"Mendalam", depth:"Dalam",        question:"Apa momen hidupmu yang paling mengubah arah perjalananmu?" },
+      { category:"Mendalam", depth:"Dalam",        question:"Apakah kamu merasa sudah mengenal dirimu sendiri dengan cukup baik?" },
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Apa hal yang tidak akan pernah kamu ceritakan kepada siapapun?" },
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Apakah ada bagian dari dirimu yang kamu benci tapi tidak tahu cara mengubahnya?" },
+      { category:"Mendalam", depth:"Dalam",        question:"Apa satu hal yang benar-benar kamu inginkan tapi takut untuk memintanya?" },
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Siapa satu orang yang benar-benar mau kamu percayai segalanya?" },
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Apakah kamu pernah merasa dunia akan lebih baik tanpa kehadiranmu?" },
+      { category:"Mendalam", depth:"Dalam",        question:"Apa yang membuat kamu tetap bertahan di saat paling gelap dalam hidupmu?" },
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Apakah ada sesuatu yang kamu takut tidak akan pernah tercapai?" },
+      { category:"Mendalam", depth:"Dalam",        question:"Apa yang paling ingin kamu dengar dari orang yang paling penting dalam hidupmu?" },
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Apakah kamu benar-benar bahagia, atau hanya terbiasa berpura-pura bahagia?" },
+      { category:"Mendalam", depth:"Sangat Dalam", question:"Kalau hidupmu berakhir besok, apa satu hal yang paling kamu sesali belum lakukan?" }
+
+    ];
+
+    /* ═══════════════════════════════════════════════════════════
+       DeepTalk — JAVASCRIPT
+       ═══════════════════════════════════════════════════════════ */
+    'use strict';
+
+    // ── State ─────────────────────────────────────────────────
+    const state = {
+      allQuestions:      questions,
+      remainingQuestions:[],
+      currentQuestion:   null,
+      cardCount:         0,
+      isFlipped:         false,
+      isAnimating:       false,
+      isSessionComplete: false,
+    };
+
+    // ── DOM refs ───────────────────────────────────────────────
+    const dom = {
+      landingPage:   () => document.getElementById('landing-page'),
+      mainPage:      () => document.getElementById('main-page'),
+      btnMulai:      () => document.getElementById('btn-mulai'),
+      progressText:  () => document.getElementById('progress-text'),
+      cardFlipper:   () => document.getElementById('card-flipper'),
+      cardBack:      () => document.getElementById('card-back'),
+      cardQuestion:  () => document.getElementById('card-question'),
+      badgeCategory: () => document.getElementById('badge-category'),
+      badgeDepth:    () => document.getElementById('badge-depth'),
+      btnAmbil:      () => document.getElementById('btn-ambil'),
+      btnBerikutnya: () => document.getElementById('btn-berikutnya'),
+      btnReset:      () => document.getElementById('btn-reset'),
+    };
+
+    const FLIP_DURATION_MS = 500;
+
+    // ── Init ───────────────────────────────────────────────────
+    function init() {
+      dom.btnMulai().addEventListener('click', () => { showPage('main'); initSession(); });
+      dom.btnAmbil().addEventListener('click', () => { if (!state.isAnimating) loadQuestion(); });
+      dom.btnBerikutnya().addEventListener('click', () => { if (!state.isAnimating) loadQuestion(); });
+      dom.btnReset().addEventListener('click', resetSession);
+    }
+
+    // ── Session ────────────────────────────────────────────────
+    function initSession() {
+      state.remainingQuestions = shuffleArray([...state.allQuestions]);
+      state.currentQuestion    = null;
+      state.cardCount          = 0;
+      state.isFlipped          = false;
+      state.isAnimating        = false;
+      state.isSessionComplete  = false;
+      dom.cardFlipper().classList.remove('flipped');
+      dom.cardBack().classList.remove('session-complete');
+      updateProgress();
+      updateButtons('initial');
+    }
+
+    function resetSession() { initSession(); }
+
+    // ── Core logic ─────────────────────────────────────────────
+    function getRandomQuestion() {
+      if (state.remainingQuestions.length === 0) return null;
+      return state.remainingQuestions.shift();
+    }
+
+    function loadQuestion() {
+      const question = getRandomQuestion();
+      if (!question) { handleSessionComplete(); return; }
+      state.currentQuestion = question;
+      state.cardCount++;
+      updateProgress();
+      updateButtons('loading');
+      if (!state.isFlipped) {
+        flipCard(() => { displayQuestion(question); updateButtons('showing'); });
+      } else {
+        reflipCard(() => { displayQuestion(question); updateButtons('showing'); });
+      }
+    }
+
+    function displayQuestion(question) {
+      const elQ = dom.cardQuestion();
+      elQ.textContent = question.question;
+      elQ.classList.remove('animate-in');
+      void elQ.offsetWidth;
+      elQ.classList.add('animate-in');
+      dom.badgeCategory().textContent = question.category;
+      dom.badgeDepth().textContent    = question.depth;
+      dom.badgeDepth().setAttribute('data-depth', question.depth);
+    }
+
+    function updateProgress() {
+      const el    = dom.progressText();
+      const total = state.allQuestions.length;
+      if (state.cardCount === 0) { el.textContent = 'Siap membuka kartu pertama'; return; }
+      el.textContent = `Pertanyaan ${state.cardCount} dari ${total}`;
+    }
+
+    function updateButtons(situation) {
+      const a = dom.btnAmbil(), b = dom.btnBerikutnya(), r = dom.btnReset();
+      switch (situation) {
+        case 'initial':  a.classList.remove('hidden'); b.classList.add('hidden');    r.classList.add('hidden');    a.disabled=false; break;
+        case 'loading':  a.disabled=true; b.disabled=true; break;
+        case 'showing':  a.classList.add('hidden');    b.classList.remove('hidden'); r.classList.remove('hidden'); b.disabled=false; r.disabled=false; break;
+        case 'complete': a.classList.add('hidden');    b.classList.add('hidden');    r.classList.remove('hidden'); r.disabled=false; break;
+      }
+    }
+
+    // ── Animation ──────────────────────────────────────────────
+    function flipCard(onHalfway) {
+      state.isAnimating = true;
+      setTimeout(() => { if (typeof onHalfway === 'function') onHalfway(); }, FLIP_DURATION_MS / 2);
+      dom.cardFlipper().classList.add('flipped');
+      state.isFlipped = true;
+      setTimeout(() => { state.isAnimating = false; }, FLIP_DURATION_MS);
+    }
+
+    function reflipCard(onComplete) {
+      state.isAnimating = true;
+      const flipper = dom.cardFlipper();
+      flipper.classList.remove('flipped');
+      state.isFlipped = false;
+      setTimeout(() => {
+        if (typeof onComplete === 'function') onComplete();
+        requestAnimationFrame(() => { flipper.classList.add('flipped'); state.isFlipped = true; });
+      }, FLIP_DURATION_MS);
+      setTimeout(() => { state.isAnimating = false; }, FLIP_DURATION_MS * 2 + 50);
+    }
+
+    // ── Session complete ───────────────────────────────────────
+    function handleSessionComplete() {
+      state.isSessionComplete = true;
+      if (!state.isFlipped) { dom.cardFlipper().classList.add('flipped'); state.isFlipped = true; }
+      const cardBack = dom.cardBack();
+      cardBack.classList.add('session-complete');
+      cardBack.querySelector('.card-back-content').innerHTML = `
+        <div class="session-complete-content">
+          <div class="session-complete-icon">✦</div>
+          <p class="session-complete-title">Semua pertanyaan sudah terbuka</p>
+          <p class="session-complete-subtitle">
+            Kamu telah membuka <strong>${state.cardCount}</strong> pertanyaan dalam sesi ini.<br />
+            Tekan tombol di bawah untuk memulai sesi baru.
+          </p>
+        </div>`;
+      dom.progressText().textContent = `Selesai — ${state.cardCount} pertanyaan dibuka`;
+      updateButtons('complete');
+    }
+
+    // ── Page navigation ────────────────────────────────────────
+    function showPage(pageName) {
+      const pages = { landing: dom.landingPage(), main: dom.mainPage() };
+      Object.values(pages).forEach(p => p.classList.remove('active'));
+      if (pages[pageName]) pages[pageName].classList.add('active');
+    }
+
+    // ── Utilities ──────────────────────────────────────────────
+    function shuffleArray(array) {
+      const s = [...array];
+      for (let i = s.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [s[i], s[j]] = [s[j], s[i]];
+      }
+      return s;
+    }
+
+    // ── Entry point ────────────────────────────────────────────
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
 </body>
 </html>
